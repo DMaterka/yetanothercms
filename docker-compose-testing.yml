@@ -1,0 +1,131 @@
+version: '3.5'
+
+networks:
+  custom-test-network:
+    driver: bridge
+    name: ${DOCKER_COMPOSE_PROJECT_NAME}-network
+
+services:
+  app-test:
+    build:
+      context: ./
+      dockerfile: ./docker/app-test.docker
+    container_name: app-test
+    ports:
+      - "9001:9000"
+    volumes:
+      - ./:/var/www
+    links:
+      - mysql-test
+      - redis-test
+      - hub
+      - chrome
+    networks:
+      - custom-test-network
+    env_file: .env.testing
+    tty: true
+    stdin_open: true
+
+  web-test:
+    build:
+      context: ./
+      dockerfile: ./docker/web-test.docker
+    container_name: web-test
+    links:
+      - app-test
+    depends_on:
+      - app-test
+    ports:
+      - "8081:80"
+    volumes:
+      - ./:/var/www
+    networks:
+      - custom-test-network
+    tty: true
+    stdin_open: true
+
+  redis-test:
+    image: 'redis:5.0'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - "16379:6379"
+    volumes:
+      - 'redis_data:/bitnami/redis/data'
+    networks:
+      - custom-test-network
+
+  mysql-test:
+    env_file:
+      - .env.testing
+    image: 'mysql:5.7'
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+    ports:
+      - "3307:3306"
+    volumes:
+      - ~/${DOCKER_COMPOSE_PROJECT_NAME}-docker/mysql/data:/var/lib/mysql
+    networks:
+      - custom-test-network
+
+  hub:
+    image: selenium/hub:3.141.59-krypton
+    container_name: hub
+    ports:
+      - "4444:4444"
+    networks:
+      - custom-test-network
+
+  firefox:
+    image: selenium/node-firefox:3.141.59-krypton
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - hub
+    environment:
+      HUB_HOST: hub
+      HUB_PORT: 4444
+    networks:
+      - custom-test-network
+
+  firefox-debug:
+    image: selenium/standalone-firefox-debug
+    volumes:
+      - /dev/shm:/dev/shm
+    ports:
+      - "5901:5900"
+      - "4446:4444"
+    networks:
+      - custom-test-network
+
+  chrome:
+    image: selenium/node-chrome:3.141.59-krypton
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - hub
+    environment:
+      HUB_HOST: hub
+      HUB_PORT: 4444
+    networks:
+      - custom-test-network
+
+  chrome-debug:
+    image: selenium/standalone-chrome-debug
+    volumes:
+      - /dev/shm:/dev/shm
+    ports:
+      - "5900:5900"
+      - "4445:4444"
+    extra_hosts:
+      - dockerhost:10.0.0.12
+    networks:
+      - custom-test-network
+
+
+volumes:
+  redis_data:
+      driver: local

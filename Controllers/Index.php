@@ -2,6 +2,10 @@
 
 namespace Controllers;
 
+/**
+ * Class Index
+ * @package Controllers
+ */
 class Index extends AbstractController {
 
     /**

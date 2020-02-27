@@ -1,0 +1,42 @@
+FROM php:7.2-fpm
+
+# Install mandatory packages.
+RUN apt-get update && apt-get install -y \
+    software-properties-common \
+    libgmp-dev \
+    re2c \
+    libmhash-dev \
+    libmcrypt-dev \
+    wget \
+    file \
+    libpng-dev \
+    git \
+    default-mysql-client \
+    curl
+
+RUN apt-get install -y curl \
+  && curl -sL https://deb.nodesource.com/setup_9.x | bash - \
+  && apt-get install -y nodejs \
+  && curl -L https://www.npmjs.com/install.sh | sh
+
+RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/local/include/ \
+    && docker-php-ext-configure gmp \
+    && docker-php-ext-configure gd \
+    && docker-php-ext-install pdo pdo_mysql \
+    && docker-php-ext-install gd \
+    && docker-php-ext-install zip \
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
+COPY ./docker/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
+RUN sed -i "s/xdebug.remote_autostart=0/xdebug.remote_autostart=1/" /usr/local/etc/php/conf.d/xdebug.ini && \
+    sed -i "s/xdebug.remote_enable=0/xdebug.remote_enable=1/" /usr/local/etc/php/conf.d/xdebug.ini && \
+    sed -i "s/xdebug.cli_color=0/xdebug.cli_color=1/" /usr/local/etc/php/conf.d/xdebug.ini
+
+# Install composer.
+COPY docker/scripts/composer.sh /composer.sh
+RUN chmod +x /composer.sh && /composer.sh
+RUN chmod +rw ~/.composer
+
+WORKDIR /var/www

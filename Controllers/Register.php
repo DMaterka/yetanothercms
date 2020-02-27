@@ -4,6 +4,10 @@ namespace Controllers;
 
 use Database\DB;
 
+/**
+ * Class Register
+ * @package Controllers
+ */
 class Register extends AbstractController {
 
     /**
@@ -21,7 +25,6 @@ class Register extends AbstractController {
      */
     public function register($params) {
         // todo validate params
-
         $email = $params['email'];
         if ( $params['password'] !== $params['password_repeat']) {
             throw new \Exception('Passwords do not match');
@@ -37,12 +40,11 @@ class Register extends AbstractController {
             throw new \Exception('User already exists');
         }
 
-        $register_sql = 'INSERT INTO users SET email=? AND password=?';
+        $register_sql = 'INSERT INTO users VALUES(?,?,?)';
 
         $stmt = $connection->prepare($register_sql);
-        $stmt->execute([$email, password_hash($params['password'])], PASSWORD_BCRYPT);
-
-
+        $stmt->execute([0, $email, password_hash($params['password'], PASSWORD_BCRYPT)]);
+        header("Location: http://localhost");
     }
 
 }

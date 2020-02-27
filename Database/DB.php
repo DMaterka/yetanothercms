@@ -8,6 +8,9 @@ namespace Database;
  */
 class DB {
 
+    /**
+     * @var \PDO $connection
+     */
     public static $connection;
 
     /**
@@ -17,10 +20,11 @@ class DB {
         if (empty(self::$connection)) {
             try {
                 $connection = new \PDO(
-                    'mysql:host=yetanothercms.docker;port=3306;dbname=cms',
+                    'mysql:host=mysql;port=3306;dbname='. $_ENV['DB_DATABASE'],
                     'root',
-                    'root'
+                    $_ENV['DB_PASSWORD']
                 );
+                $connection->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
                 self::$connection = $connection;
             } catch(PDOException $e) {
                 //todo throw
@@ -29,7 +33,6 @@ class DB {
         }
         return self::$connection;
     }
-
 }
 
 

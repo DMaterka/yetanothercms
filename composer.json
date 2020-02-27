@@ -5,5 +5,9 @@
       "Database\\": "Database/",
       "Models\\": "Models/"
     }
+  },
+  "require": {
+    "symfony/dotenv": "^5.0",
+    "guzzlehttp/guzzle": "^6.5"
   }
 }

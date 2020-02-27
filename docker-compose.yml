@@ -1,0 +1,67 @@
+version: '3.5'
+
+networks:
+  custom-network:
+    driver: bridge
+    name: ${DOCKER_COMPOSE_PROJECT_NAME}-network
+
+services:
+  web:
+    build:
+      context: ./
+      dockerfile: ./docker/web.docker
+    container_name: ${DOCKER_COMPOSE_PROJECT_NAME}-web
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www
+    links:
+      - app
+    networks:
+      - custom-network
+
+  app:
+    build:
+      context: ./
+      dockerfile: ./docker/app.docker
+    container_name: app_container
+    ports:
+      - '9000:9000'
+    volumes:
+      - ./:/var/www
+    links:
+      - mysql
+      - redis
+    networks:
+      - custom-network
+
+  redis:
+    image: 'redis:5.0'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redis_data:/bitnami/redis/data'
+    networks:
+      - custom-network
+
+  mysql:
+    env_file:
+      - .env
+    image: 'mysql:5.7'
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+    ports:
+      - '3306:3306'
+    volumes:
+      - ~/${DOCKER_COMPOSE_PROJECT_NAME}-docker/mysql/data:/var/lib/mysql
+    networks:
+      - custom-network
+
+volumes:
+  redis_data:
+      driver: local

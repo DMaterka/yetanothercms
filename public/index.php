@@ -1,6 +1,7 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
-
+require __DIR__ . '/../vendor/autoload.php';
+$dotenv = new \Symfony\Component\Dotenv\Dotenv();
+$dotenv->load(__DIR__.'/../.env');
 //todo filter & validate
 $pageVariable = !empty($_REQUEST['page']) ? $_REQUEST['page'] : null;
 
