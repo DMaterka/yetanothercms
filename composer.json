@@ -8,6 +8,8 @@
   },
   "require": {
     "symfony/dotenv": "^5.0",
-    "guzzlehttp/guzzle": "^6.5"
+    "guzzlehttp/guzzle": "^6.5",
+    "lcobucci/jwt": "^3.3",
+    "ext-pdo": "*"
   }
 }

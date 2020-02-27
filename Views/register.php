@@ -12,10 +12,10 @@
         <label for="InputPassword2">Repeat Password</label>
         <input type="password" name="params[password_repeat]" class="form-control" id="InputPassword2" placeholder="Password">
     </div>
-<!--    <div class="form-check">-->
-<!--        <input type="checkbox" class="form-check-input" id="Check1">-->
-<!--        <label class="form-check-label" for="exampleCheck1">Check me out</label>-->
-<!--    </div>-->
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="Check1">
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 

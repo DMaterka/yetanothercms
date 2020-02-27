@@ -3,11 +3,11 @@
 require __DIR__ . '/vendor/autoload.php';
 $dotenv = new \Symfony\Component\Dotenv\Dotenv();
 $dotenv->load(__DIR__.'/.env');
+
 try {
-$connection =  \Database\DB::getConnection();
+    $connection =  \Database\DB::getConnection();
+    $connection->beginTransaction();
 
-
-$connection->beginTransaction();
     //create users table
     $connection->query('
         create table users(
@@ -28,8 +28,8 @@ $connection->beginTransaction();
         );
     ');
 
-$connection->commit();
+    $connection->commit();
+
 } catch (PDOException $exception) {
-    var_dump($connection->errorInfo());
-    var_dump($exception->getMessage());
+    echo  $exception->getMessage();
 }

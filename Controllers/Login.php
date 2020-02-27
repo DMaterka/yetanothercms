@@ -4,6 +4,10 @@ namespace Controllers;
 
 use Database\DB;
 
+/**
+ * Class Login
+ * @package Controllers
+ */
 class Login extends AbstractController {
 
     /**
@@ -16,16 +20,23 @@ class Login extends AbstractController {
 
     /**
      * @param $params
-     * @return bool
+     * @return void
      */
     public function login($params) {
 
-        $user = $params['user'];
+        $email = $params['email'];
         $password = $params['password'];
 
         $connection = DB::getConnection();
+        $stmt = $connection->prepare('SELECT password FROM users WHERE email=?');
+        $stmt->execute([$email]);
+        $hash = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        return true;
+        if (password_verify($password, $hash['password'])) {
+            header("access_token: 123");
+        } else {
+            header("token: 0");
+        }
     }
 
 }
