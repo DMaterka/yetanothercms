@@ -3,7 +3,8 @@
     "psr-4": {
       "Controllers\\": "Controllers/",
       "Database\\": "Database/",
-      "Models\\": "Models/"
+      "Models\\": "Models/",
+      "App\\": "App/"
     }
   },
   "require": {

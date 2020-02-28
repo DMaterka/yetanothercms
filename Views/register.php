@@ -1,4 +1,4 @@
-<form action="/?page=register&action=register" method="post">
+<form action="/?page=auth&action=register" method="post">
     <div class="form-group">
         <label for="InputEmail1">Email address</label>
         <input type="email" name="params[email]" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="Enter email">

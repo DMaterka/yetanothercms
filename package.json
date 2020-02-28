@@ -1,0 +1,36 @@
+{
+  "name": "yetanothercms",
+  "version": "1.0.0",
+  "description": "<pre>",
+  "main": "index.js",
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.16.1",
+    "webpack": "^4.41.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.6",
+    "@babel/preset-env": "^7.8.6",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.4.2",
+    "mini-css-extract-plugin": "^0.9.0",
+    "postcss-loader": "^3.0.0",
+    "sass": "^1.26.1",
+    "sass-loader": "^8.0.2",
+    "webpack-cli": "^3.3.11"
+  },
+  "scripts": {
+    "build": "webpack --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DMaterka/yetanothercms.git"
+  },
+  "author": "Daniel Materka",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DMaterka/yetanothercms/issues"
+  },
+  "homepage": "https://github.com/DMaterka/yetanothercms#readme"
+}

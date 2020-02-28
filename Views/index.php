@@ -1,5 +1,13 @@
-<a href="?page=login&action=show" type="button" class="btn btn-primary" >Login</a>
-<a href="?page=register&action=show" type="button" class="btn btn-secondary" >Register</a>
+ <?php
+    if (\App\Auth::checkIfLoggedIn()) {
+        echo '<a href="?page=auth&action=logout" type="button" class="btn btn-primary" >Logout </a>';
+    } else {
+        echo '<a href="?page=auth&action=showLoginForm" type="button" class="btn btn-primary" >Login </a>';
+        echo '<a href="?page=auth&action=showRegistrationForm" type="button" class="btn btn-secondary" >Register</a>';
+    }
+?>
+
+
 </br>
 </br>
 </br>
