@@ -10,9 +10,9 @@
 
     <title>Hello, world!</title>
 </head>
-<body>
+
 <?php echo $mainContent; ?>
 
 <script src="/dist/bundle.js"></script>
-</body>
+
 </html>

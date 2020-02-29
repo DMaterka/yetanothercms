@@ -14,7 +14,6 @@ module.exports = {
         path: path.resolve(__dirname, 'public/dist'),
         filename: 'bundle.js'
     },
-
     module: {
         rules: [
             {
@@ -29,7 +28,7 @@ module.exports = {
             },
             {
                 // Apply rule for .sass, .scss or .css files
-                test: /\.(sa|sc|c)ss$/,
+                test: /\.(scss)$/,
 
                 // Set loaders to transform files.
                 // Loaders are applying from right to left(!)
@@ -44,16 +43,20 @@ module.exports = {
                     {
                         // This loader resolves url() and @imports inside CSS
                         loader: "css-loader",
+                        options: {
+                            sourceMap: true
+                        }
                     },
-                    // {
-                    //     // Then we apply postCSS fixes like autoprefixer and minifying
-                    //     loader: "postcss-loader"
-                    // },
+                    {
+                        // Then we apply postCSS fixes like autoprefixer and minifying
+                        loader: "postcss-loader"
+                    },
                     {
                         // First we transform SASS to standard CSS
                         loader: "sass-loader",
                         options: {
-                            implementation: require("sass")
+                            implementation: require("sass"),
+                            sourceMap: true
                         }
                     }
                 ]
@@ -62,7 +65,8 @@ module.exports = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: "bundle.css"
+            filename: "bundle.css",
+            chunkFilename: '[id].css',
         })
 
     ],

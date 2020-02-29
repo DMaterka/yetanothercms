@@ -1,3 +1,3 @@
 console.log('Hello');
 import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import '../scss/_custom.scss';

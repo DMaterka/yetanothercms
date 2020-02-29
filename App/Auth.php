@@ -12,7 +12,6 @@ use Lcobucci\JWT\Parser;
  */
 class Auth
 {
-
     /**
      * @return bool
      */
@@ -22,7 +21,7 @@ class Auth
             $parsedToken = (new Parser())->parse((string) $_COOKIE['access_token']);
         }
 
-        if (!empty($parsedToken)) {
+        if (!empty($parsedToken) && !$parsedToken->isExpired()) {
             $validationData = new \Lcobucci\JWT\ValidationData(); // It will use the current time to validate (iat, nbf and exp)
             $validationData->setAudience($parsedToken->getClaim('aud'));
             $validationData->setIssuer($parsedToken->getClaim('iss'));
