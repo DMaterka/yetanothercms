@@ -23,7 +23,8 @@ try {
         create table articles(
            id INT NOT NULL AUTO_INCREMENT,
            title VARCHAR(40) NOT NULL,
-           content VARCHAR(100) NOT NULL,
+           intro VARCHAR(100) NOT NULL,
+           content VARCHAR(255) NOT NULL,
            PRIMARY KEY ( id )
         );
     ');

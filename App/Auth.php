@@ -3,7 +3,6 @@
 
 namespace App;
 
-
 use Lcobucci\JWT\Parser;
 
 /**
@@ -29,6 +28,7 @@ class Auth
             $parsedToken->validate($validationData);
             return true;
         }
+
         return false;
     }
 

@@ -3,30 +3,41 @@
 
 namespace Models\Interfaces;
 
-
+/**
+ * Interface UserInterface
+ * @package Models\Interfaces
+ */
 interface UserInterface
 {
-    public function getId();
+    CONST TABLE = 'users';
+    CONST ID = 'ID';
+    CONST EMAIL = 'title';
+    CONST PASSWORD = 'intro';
 
     /**
-     * @param $id
+     * @return int
+     */
+    public function getId(): int;
+
+    /**
+     * @param string $email
      * @return $this
      */
     public function setEmail(string $email): self;
 
     /**
-     * @return int
+     * @return string
      */
-    public function getEmail();
+    public function getEmail(): string;
 
     /**
      * @param string $password
      * @return $this
      */
-    public function setPassword(string $password);
+    public function setPassword(string $password): self;
 
     /**
-     * @return int
+     * @return string
      */
-    public function getPassword();
+    public function getPassword(): string;
 }

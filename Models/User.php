@@ -4,7 +4,7 @@ namespace Models;
 
 use Models\Interfaces\UserInterface;
 
-class User implements UserInterface
+class User extends AbstractModel implements UserInterface
 {
     /**
      * @var int $id
@@ -25,7 +25,8 @@ class User implements UserInterface
      * @param $id
      * @return $this
      */
-    public function setId(int $id) {
+    public function setId(int $id): UserInterface
+    {
         $this->id = $id;
         return $this;
     }
@@ -33,24 +34,26 @@ class User implements UserInterface
     /**
      * @return int
      */
-    public function getId() {
+    public function getId(): int
+    {
         return $this->id;
     }
 
     /**
-     * @param $id
+     * @param string $email
      * @return $this
      */
-    public function setEmail(string $email): self
+    public function setEmail(string $email): UserInterface
     {
         $this->email = $email;
         return $this;
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getEmail() {
+    public function getEmail(): string
+    {
         return $this->email;
     }
 
@@ -58,15 +61,17 @@ class User implements UserInterface
      * @param string $password
      * @return $this
      */
-    public function setPassword(string $password) {
+    public function setPassword(string $password): UserInterface
+    {
         $this->password = $password;
         return $this;
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getPassword() {
+    public function getPassword(): string
+    {
         return $this->password;
     }
 

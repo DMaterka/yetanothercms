@@ -26,7 +26,7 @@ class DB {
                 );
                 $connection->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
                 self::$connection = $connection;
-            } catch(PDOException $e) {
+            } catch(\PDOException $e) {
                 //todo throw
                 echo 'Połączenie nie mogło zostać utworzone: ' . $e->getMessage();
             }

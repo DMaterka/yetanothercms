@@ -4,7 +4,7 @@ namespace Models;
 
 use Models\Interfaces\ArticleInterface;
 
-class Article implements ArticleInterface
+class Article extends AbstractModel implements ArticleInterface
 {
     /**
      * @var int $id
@@ -22,10 +22,16 @@ class Article implements ArticleInterface
     protected $content;
 
     /**
+     * @var string $intro
+     */
+    protected $intro;
+
+    /**
      * @param $id
      * @return $this
      */
-    public function setId(int $id) {
+    public function setId(int $id): ArticleInterface
+    {
         $this->id = $id;
         return $this;
     }
@@ -33,7 +39,8 @@ class Article implements ArticleInterface
     /**
      * @return int
      */
-    public function getId() {
+    public function getId(): int
+    {
         return $this->id;
     }
 
@@ -41,7 +48,7 @@ class Article implements ArticleInterface
      * @param string $title
      * @return $this
      */
-    public function setTitle(string $title): self
+    public function setTitle(string $title): ArticleInterface
     {
         $this->title = $title;
         return $this;
@@ -50,16 +57,24 @@ class Article implements ArticleInterface
     /**
      * @return int|string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntro(): string
+    {
+        return $this->intro;
     }
 
     /**
      * @param string $content
      * @return $this|ArticleInterface
      */
-    public function setContent(string $content)
+    public function setContent(string $content): ArticleInterface
     {
         $this->content = $content;
         return $this;
@@ -68,10 +83,18 @@ class Article implements ArticleInterface
     /**
      * @return int|mixed
      */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
 
-
+    /**
+     * @param string $intro
+     * @return ArticleInterface
+     */
+    public function setIntro(string $intro): ArticleInterface
+    {
+        $this->intro = $intro;
+        return $this;
+    }
 }

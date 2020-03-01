@@ -11,7 +11,8 @@
     <title>Hello, world!</title>
 </head>
 
-<?php echo $mainContent; ?>
+<?php /** @noinspection PhpUndefinedVariableInspection */
+echo $mainContent; ?>
 
 <script src="/dist/bundle.js"></script>
 
