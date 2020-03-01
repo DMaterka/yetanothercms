@@ -8,11 +8,13 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/dist/bundle.css">
 
-    <title>Hello, world!</title>
+    <title>Yet another CMS</title>
 </head>
 
-<?php /** @noinspection PhpUndefinedVariableInspection */
-echo $mainContent; ?>
+<?php
+/** @noinspection PhpUndefinedVariableInspection */
+echo $mainContent;
+?>
 
 <script src="/dist/bundle.js"></script>
 

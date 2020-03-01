@@ -1,13 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-<?php
-    if (\App\Auth::checkIfLoggedIn()) {
-        echo '<a href="?page=auth&action=logout" type="button" class="btn btn-primary" >Logout </a>';
-    } else {
-        echo '<a href="?page=auth&action=showLoginForm" type="button" class="btn btn-primary" >Login </a>';
-        echo '<a href="?page=auth&action=showRegistrationForm" type="button" class="btn btn-secondary" >Register</a>';
-    }
-?>
-</nav>
+<?php include_once 'layout/navbar.php'; ?>
 <body>
     <main role="main">
         <div class="jumbotron">
@@ -25,11 +16,12 @@
                     <div class="col-md-4">
                         <h1> <?php echo $article['title'] ?> </h1>
                         <div> <?php echo $article['content'] ?> </div>
-                        <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+                        <p><a class="btn btn-secondary" href="?page=article&action=show&params[id]=<?php echo $article['id'] ?>" role="button">View details &raquo;</a></p>
                     </div>
                 </div>
             <?php endforeach; ?>
             <?php endif; ?>
         </div>
     </main>
+    <?php include_once 'layout/footer.php'; ?>
 </body>

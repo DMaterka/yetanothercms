@@ -21,7 +21,7 @@ abstract class AbstractController implements ControllerInterface {
         //content shown on the rendered view
         $mainContent = ob_get_contents();
         ob_end_clean();
-        include_once '../Views/layout.php';
+        include_once '../Views/layout/layout.php';
     }
 
 }
