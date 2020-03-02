@@ -23,8 +23,26 @@ class Article extends AbstractController
         return $this->render('article', $params);
     }
 
-    public function showAddForm()
+    /**
+     * @param $params
+     * @return mixed|void
+     */
+    public function addArticle($params)
     {
+        return $this->render('addArticle', $params);
+    }
 
+    /**
+     * @param $params
+     * @throws \ReflectionException
+     */
+    public function store($params)
+    {
+        $article = (new \Models\Article())
+            ->setTitle($params['title'])
+            ->setIntro($params['intro'])
+            ->setContent($params['content']);
+        $article->save();
+        header('location: /');
     }
 }

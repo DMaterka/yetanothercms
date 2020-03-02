@@ -7,7 +7,7 @@
         <?php
             if (\App\Auth::checkIfLoggedIn()) {
                 echo '<li class="nav-item">
-                <a class="nav-link" href="?page=article&action=showAddForm">Add article</a>
+                <a class="nav-link" href="?page=article&action=addArticle">Add article</a>
             </li>';
             }
         ?>

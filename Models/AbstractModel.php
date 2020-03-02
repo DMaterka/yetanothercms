@@ -61,14 +61,20 @@ abstract class AbstractModel
     }
 
     /**
-     * TODO
+     * TODO check against database fields
      * @throws \ReflectionException
      */
     public function save()
     {
-        $properties = $this->getModelProperties();
-        $makeQuery['first_part'] = 'INSERT INTO';
-        $makeQuery['table'] = '';
+        $objectValues = array_filter($this->toArray());
+        $queryElements['first_part'] = 'INSERT INTO';
+        $queryElements['table'] = self::getTableName();
+//        $queryElements['values'] = 'VALUES ('.  str_repeat('?,', count($properties)).')';
+        $queryElements['columns'] = '(title,intro,content)';
+        $queryElements['values'] = 'VALUES (?,?,?)';
+        $sql = implode(' ', $queryElements);
+        $stmt = DB::getConnection()->prepare($sql);
+        $stmt->execute(array_values($objectValues));
     }
 
     /**

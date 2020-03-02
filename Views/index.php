@@ -10,17 +10,17 @@
         </div>
 
         <div class="container">
+            <div class="row">
             <?php if (!empty($params['articles'])): ?>
             <?php foreach ($params['articles'] as $article): ?>
-                <div class="row">
                     <div class="col-md-4">
                         <h1> <?php echo $article['title'] ?> </h1>
                         <div> <?php echo $article['content'] ?> </div>
                         <p><a class="btn btn-secondary" href="?page=article&action=show&params[id]=<?php echo $article['id'] ?>" role="button">View details &raquo;</a></p>
                     </div>
-                </div>
             <?php endforeach; ?>
             <?php endif; ?>
+            </div>
         </div>
     </main>
     <?php include_once 'layout/footer.php'; ?>

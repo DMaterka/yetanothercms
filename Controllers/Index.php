@@ -8,8 +8,8 @@ use Models\Article;
  * Class Index
  * @package Controllers
  */
-class Index extends AbstractController {
-
+class Index extends AbstractController
+{
     /**
      * @param $params
      * @return mixed|void
@@ -17,14 +17,8 @@ class Index extends AbstractController {
      */
     public function show($params)
     {
-        //mockup
-        //todo get from database
-
-        $article = Article::fetch(1);
-
-        //todo seed db for demo
-
-        $params['articles'] = [$article->toArray()];
+        $articles = Article::fetch();
+        $params['articles'] = $articles;
 
         /** @file ../Views/index.php */
         return $this->render('index', $params);

@@ -16,4 +16,5 @@
         </div>
     </div>
 </main>
+<?php include_once 'layout/footer.php'; ?>
 </body>
