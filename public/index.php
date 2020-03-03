@@ -1,29 +1,32 @@
 <?php
+
+use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 require __DIR__ . '/../vendor/autoload.php';
-$dotenv = new \Symfony\Component\Dotenv\Dotenv();
+$dotenv = new Dotenv();
 $dotenv->load(__DIR__.'/../.env');
 
+$request = Request::createFromGlobals();
+
 //todo filter & validate
-$pageVariable = !empty($_REQUEST['page']) ? $_REQUEST['page'] : null;
+$pageVariable = $request->query->get('page', 'index');
 
-if (empty($pageVariable)) {
-    $pageVariable = 'index';
-}
+$actionVariable = $request->query->get('action', 'show');
 
-$actionVariable = !empty($_REQUEST['action']) ? $_REQUEST['action'] : null;
-if (empty($actionVariable)) {
-    $actionVariable = 'show';
-}
-$paramsVariable = !empty($_REQUEST['params']) ? $_REQUEST['params'] : null;
+$paramsVariable = $request->query->get('params', null);
 
-$controllerName = 'Controllers\\' . ucfirst($pageVariable);
+$controllerName = 'Controllers\\' . ucfirst($pageVariable) . 'Controller';
 
-if (!class_exists($controllerName)){
+if (!class_exists($controllerName)) {
     require_once '../Views/404.php';
     exit();
 }
 
 $controller = new $controllerName();
-$controller->{$actionVariable}($paramsVariable);
+$response = $controller->{$actionVariable}($request);
 
-
+if ($response instanceof Response) {
+    $response->send();
+}

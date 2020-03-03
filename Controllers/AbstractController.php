@@ -3,12 +3,28 @@
 namespace Controllers;
 
 use Controllers\Interfaces\ControllerInterface;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class AbstractController
  * @package Controllers
  */
 abstract class AbstractController implements ControllerInterface {
+
+    /**
+     * @var ValidatorInterface $validator
+     */
+    protected $validator;
+
+    /**
+     * Article constructor.
+     */
+    public function __construct()
+    {
+        $this->validator = Validation::createValidator();
+    }
+
     /**
      * @param $template
      * @param $params

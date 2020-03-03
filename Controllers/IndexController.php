@@ -3,25 +3,24 @@
 namespace Controllers;
 
 use Models\Article;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class Index
+ * Class IndexController
  * @package Controllers
  */
-class Index extends AbstractController
+class IndexController extends AbstractController
 {
     /**
      * @param $params
      * @return mixed|void
      * @throws \ReflectionException
      */
-    public function show($params)
+    public function show(Request $request)
     {
         $articles = Article::fetch();
-        $params['articles'] = $articles;
-
         /** @file ../Views/index.php */
-        return $this->render('index', $params);
+        return $this->render('index', $articles);
     }
 
 }

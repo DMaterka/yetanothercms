@@ -4,12 +4,18 @@ namespace Controllers;
 
 use Database\DB;
 use Lcobucci\JWT\Builder;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\Collection;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Type;
 
 /**
  * Class Login
  * @package Controllers
  */
-class Auth extends AbstractController {
+class AuthController extends AbstractController {
 
     /**
      * @param $params
@@ -23,10 +29,21 @@ class Auth extends AbstractController {
      * @param $params
      * @return void
      */
-    public function login($params): void
+    public function login(Request $request)
     {
-        $email = $params['email'];
-        $password = $params['password'];
+        $rules = new Collection([
+            'email' => [
+                new Email()
+            ],
+            'password' => [
+                new Type('string')
+            ]
+        ]);
+
+        $this->validator->validate($request, $rules);
+
+        $email = $request->request->get('params')['email'];
+        $password = $request->request->get('params')['password'];
         $connection = DB::getConnection();
         $stmt = $connection->prepare('SELECT * FROM users WHERE email=?');
         $stmt->execute([$email]);
@@ -46,15 +63,19 @@ class Auth extends AbstractController {
             $token->getHeaders(); // Retrieves the token headers
             $token->getClaims(); // Retrieves the token claims
             setcookie('access_token', $token, $time + 3600, '', '', false, true);
-            header('localhost/', true, '200');
+            return (new RedirectResponse('/'));
         } else {
-            header('localhost/', true, '403');
+            return (new Response('Invalid credentials', 403));
         }
     }
 
-    public function logout($params) {
+    /**
+     * @param $params
+     * @return RedirectResponse
+     */
+    public function logout() {
         setcookie('access_token', 0, time() + 3600, '', '', false, true);
-        header("Location: http://localhost");
+        return (new RedirectResponse('/'));
     }
 
     /**
@@ -67,13 +88,14 @@ class Auth extends AbstractController {
 
     /**
      * @param $params
-     * @return string
+     * @return RedirectResponse
      * @throws \Exception
      */
-    public function register($params) {
+    public function register(Request $request): RedirectResponse
+    {
         // todo validate params
-        $email = $params['email'];
-        if ( $params['password'] !== $params['password_repeat']) {
+        $email = $request->request->get('params')['email'];
+        if ( $request->request->get('params')['password'] !== $request->request->get('params')['password_repeat']) {
             throw new \Exception('Passwords do not match');
         }
         $connection = DB::getConnection();
@@ -90,8 +112,8 @@ class Auth extends AbstractController {
         $register_sql = 'INSERT INTO users VALUES(?,?,?)';
 
         $stmt = $connection->prepare($register_sql);
-        $stmt->execute([0, $email, password_hash($params['password'], PASSWORD_BCRYPT)]);
-        header("Location: http://localhost");
+        $stmt->execute([0, $email, password_hash($request->request->get('params')['password'], PASSWORD_BCRYPT)]);
+        return (new RedirectResponse('/'));
     }
 
 }

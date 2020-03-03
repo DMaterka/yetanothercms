@@ -11,12 +11,18 @@
 
         <div class="container">
             <div class="row">
-            <?php if (!empty($params['articles'])): ?>
-            <?php foreach ($params['articles'] as $article): ?>
+            <?php if (!empty($params)): ?>
+            <?php foreach ($params as $article): ?>
                     <div class="col-md-4">
-                        <h1> <?php echo $article['title'] ?> </h1>
-                        <div> <?php echo $article['content'] ?> </div>
-                        <p><a class="btn btn-secondary" href="?page=article&action=show&params[id]=<?php echo $article['id'] ?>" role="button">View details &raquo;</a></p>
+                        <h1> <?php echo $article['title']; ?> </h1>
+                        <div> <?php echo $article['intro']; ?> </div>
+                        <p>
+                            <a class="btn btn-sm btn-secondary" href="?page=article&action=show&params[id]=<?php echo $article['id']; ?>" role="button">View details &raquo;</a>
+                        <?php if (\App\Auth::checkIfLoggedIn()): ?>
+                            <a class="btn btn-sm btn-warning" role="button" href="?page=article&action=showUpdateForm&params[id]=<?php echo $article['id']; ?>" >Edit</a>
+                            <a  class="btn btn-sm btn-danger" role="button" href="?page=article&action=delete&params[id]=<?php echo $article['id']; ?>">Delete</a>
+                        <? endif; ?>
+                        </p>
                     </div>
             <?php endforeach; ?>
             <?php endif; ?>

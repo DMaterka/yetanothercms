@@ -54,9 +54,10 @@ abstract class AbstractModel
             $results = $results[0];
         }
         foreach ($results as $name => $result) {
-            $model->{$name} = $result;
+            if (!empty($result)) {
+                $model->{$name} = $result;
+            }
         }
-
         return $model;
     }
 
@@ -75,6 +76,39 @@ abstract class AbstractModel
         $sql = implode(' ', $queryElements);
         $stmt = DB::getConnection()->prepare($sql);
         $stmt->execute(array_values($objectValues));
+    }
+
+    /**
+     * @param int $id
+     * @throws \ReflectionException
+     */
+    public static function delete(int $id)
+    {
+        $queryElements['first_part'] = 'DELETE FROM';
+        $queryElements['table'] = self::getTableName();
+        $queryElements['conditions'] = 'WHERE id=?';
+        $sql = implode(' ', $queryElements);
+        $stmt = DB::getConnection()->prepare($sql);
+        $stmt->execute([$id]);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function update(int $id)
+    {
+        $objectValues = array_filter($this->toArray());
+        $queryElements['first_part'] = 'UPDATE';
+        $queryElements['table'] = self::getTableName();
+        $updateStr = '';
+        foreach ($objectValues as $key => $objectValue) {
+            $updateStr .= $key . '=:' . $key . ', ';
+        }
+        $queryElements['columns'] = 'SET '. rtrim($updateStr, ', ');
+        $queryElements['conditions'] = 'WHERE id=:id';
+        $sql = implode(' ', $queryElements);
+        $stmt = DB::getConnection()->prepare($sql);
+        $stmt->execute(array_merge($objectValues, ['id' => $id]));
     }
 
     /**
@@ -102,5 +136,4 @@ abstract class AbstractModel
     {
         return class_implements(get_called_class());
     }
-
 }
