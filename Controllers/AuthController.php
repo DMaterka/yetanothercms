@@ -2,7 +2,6 @@
 
 namespace Controllers;
 
-use Database\DB;
 use Lcobucci\JWT\Builder;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,16 +11,18 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Type;
 
 /**
- * Class Login
+ * Class AuthController
  * @package Controllers
+ * @author Daniel Materka <daniel.materka@gmail.com>
  */
-class AuthController extends AbstractController {
-
+class AuthController extends AbstractController
+{
     /**
      * @param $params
      * @return mixed|void
      */
-    public function showLoginForm($params) {
+    public function showLoginForm($params)
+    {
         return $this->render('login', $params);
     }
 
@@ -44,8 +45,9 @@ class AuthController extends AbstractController {
 
         $email = $request->request->get('params')['email'];
         $password = $request->request->get('params')['password'];
-        $connection = DB::getConnection();
-        $stmt = $connection->prepare('SELECT * FROM users WHERE email=?');
+
+        //TODO method getByKey
+        $stmt = $this->dbConn->prepare('SELECT * FROM users WHERE email=?');
         $stmt->execute([$email]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -73,7 +75,8 @@ class AuthController extends AbstractController {
      * @param $params
      * @return RedirectResponse
      */
-    public function logout() {
+    public function logout()
+    {
         setcookie('access_token', 0, time() + 3600, '', '', false, true);
         return (new RedirectResponse('/'));
     }
@@ -82,7 +85,8 @@ class AuthController extends AbstractController {
      * @param $params
      * @return mixed|void
      */
-    public function showRegistrationForm($params) {
+    public function showRegistrationForm($params)
+    {
         return $this->render('register', $params);
     }
 
@@ -95,15 +99,16 @@ class AuthController extends AbstractController {
     {
         // todo validate params
         $email = $request->request->get('params')['email'];
-        if ( $request->request->get('params')['password'] !== $request->request->get('params')['password_repeat']) {
+        $password = $request->request->get('params')['password'];
+        $passwordRepeat = $request->request->get('params')['password_repeat'];
+        if ($password !== $passwordRepeat) {
             throw new \Exception('Passwords do not match');
         }
-        $connection = DB::getConnection();
 
         //does the user exist?
         $sql = "SELECT * FROM users WHERE email=?";
 
-        $stmt = $connection->prepare($sql);
+        $stmt = $this->dbConn->prepare($sql);
         $stmt->execute([$email]);
         if (!empty($stmt->fetchAll(\PDO::FETCH_ASSOC))) {
             throw new \Exception('User already exists');
@@ -111,7 +116,7 @@ class AuthController extends AbstractController {
 
         $register_sql = 'INSERT INTO users VALUES(?,?,?)';
 
-        $stmt = $connection->prepare($register_sql);
+        $stmt = $this->dbConn->prepare($register_sql);
         $stmt->execute([0, $email, password_hash($request->request->get('params')['password'], PASSWORD_BCRYPT)]);
         return (new RedirectResponse('/'));
     }

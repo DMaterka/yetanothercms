@@ -3,26 +3,34 @@
 namespace Controllers;
 
 use Controllers\Interfaces\ControllerInterface;
+use Database\DBCreator;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class AbstractController
  * @package Controllers
+ * @author Daniel Materka <daniel.materka@gmail.com>
  */
-abstract class AbstractController implements ControllerInterface {
-
+abstract class AbstractController implements ControllerInterface
+{
     /**
      * @var ValidatorInterface $validator
      */
     protected $validator;
 
     /**
-     * Article constructor.
+     * @var \PDO $dbConn
+     */
+    protected $dbConn;
+
+    /**
+     * AbstractController constructor.
      */
     public function __construct()
     {
         $this->validator = Validation::createValidator();
+        $this->dbConn = (new DBCreator())->create()->getInstance();
     }
 
     /**

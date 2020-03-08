@@ -3,7 +3,7 @@
 
 namespace Models;
 
-use Database\DB;
+use Database\DBCreator;
 
 /**
  * Class AbstractModel
@@ -11,6 +11,19 @@ use Database\DB;
  */
 abstract class AbstractModel
 {
+    /**
+     * @var \PDO $databaseConn
+     */
+    protected $databaseConn;
+
+    /**
+     * AbstractModel constructor.
+     */
+    public function __construct()
+    {
+        $this->databaseConn = (new DBCreator())->create()->getInstance();
+    }
+
     /**
      * @return array
      * @throws \ReflectionException
@@ -27,12 +40,13 @@ abstract class AbstractModel
     }
 
     /**
-     * @param int $id
+     * @param int|null $id
      * @return mixed
      * @throws \ReflectionException
      */
     public static function fetch(?int $id = null)
     {
+        $dbConnection = (new DBCreator())->create()->getInstance();
         $queryElements['first_part'] = 'SELECT * FROM';
         $queryElements['table'] = self::getTableName();
 
@@ -45,7 +59,7 @@ abstract class AbstractModel
 
         $sql = implode(' ', $queryElements);
 
-        $stmt = DB::getConnection()->prepare($sql);
+        $stmt = $dbConnection->prepare($sql);
         $stmt->execute([$id]);
         $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $className = get_called_class();
@@ -74,7 +88,7 @@ abstract class AbstractModel
         $queryElements['columns'] = '(title,intro,content)';
         $queryElements['values'] = 'VALUES (?,?,?)';
         $sql = implode(' ', $queryElements);
-        $stmt = DB::getConnection()->prepare($sql);
+        $stmt = $this->databaseConn->prepare($sql);
         $stmt->execute(array_values($objectValues));
     }
 
@@ -84,11 +98,12 @@ abstract class AbstractModel
      */
     public static function delete(int $id)
     {
+        $dbConnection = (new DBCreator())->create()->getInstance();
         $queryElements['first_part'] = 'DELETE FROM';
         $queryElements['table'] = self::getTableName();
         $queryElements['conditions'] = 'WHERE id=?';
         $sql = implode(' ', $queryElements);
-        $stmt = DB::getConnection()->prepare($sql);
+        $stmt = $dbConnection->prepare($sql);
         $stmt->execute([$id]);
     }
 
@@ -107,7 +122,7 @@ abstract class AbstractModel
         $queryElements['columns'] = 'SET '. rtrim($updateStr, ', ');
         $queryElements['conditions'] = 'WHERE id=:id';
         $sql = implode(' ', $queryElements);
-        $stmt = DB::getConnection()->prepare($sql);
+        $stmt = $this->databaseConn->prepare($sql);
         $stmt->execute(array_merge($objectValues, ['id' => $id]));
     }
 
