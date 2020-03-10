@@ -3,8 +3,14 @@
 
 namespace Database\Interfaces;
 
-
+/**
+ * Interface DBInstanceInterface
+ * @package Database\Interfaces
+ */
 interface DBInstanceInterface
 {
-    public function getInstance();
+    /**
+     * @return \PDO
+     */
+    public function getInstance(): \PDO;
 }

@@ -24,8 +24,10 @@ class MysqlInstance implements DBInstanceInterface
     public function __construct()
     {
         $connection = new \PDO(
-            'mysql:host=mysql;port=3306;dbname='.$_ENV['DB_DATABASE'],
-            'root',
+            'mysql:host='.$_ENV['DB_HOST'].';
+            port='.$_ENV['DB_PORT'].';
+            dbname='.$_ENV['DB_DATABASE'],
+            $_ENV['DB_USER'],
             $_ENV['DB_PASSWORD']
         );
 
@@ -35,9 +37,9 @@ class MysqlInstance implements DBInstanceInterface
     }
 
     /**
-     * @return \PDO $instance
+     * @return \PDO
      */
-    public function getInstance()
+    public function getInstance(): \PDO
     {
         return $this->instance;
     }

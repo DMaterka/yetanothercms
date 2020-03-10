@@ -2,6 +2,7 @@
 
 namespace Database;
 
+use Database\Interfaces\DBCreatorInterface;
 use Database\Interfaces\DBInstanceInterface;
 
 /**
@@ -9,7 +10,7 @@ use Database\Interfaces\DBInstanceInterface;
  * @package Database
  * @author Daniel Materka <daniel.materka@gmail.com>
  */
-class DBCreator
+class DBCreator implements DBCreatorInterface
 {
     /**
      * @var DBInstanceInterface $connection
@@ -17,16 +18,14 @@ class DBCreator
     public static $connection;
 
     /**
-     * @return DBInstanceInterface|MysqlInstance
+     * @return DBInstanceInterface
      */
-    public function create()
+    public function create(): DBInstanceInterface
     {
         if (empty(self::$connection)) {
             switch (strtolower($_ENV['DB_TYPE'])) {
-                case 'mysql':
-                    self::$connection = new MysqlInstance();
-                    break;
                 default:
+                case 'mysql':
                     self::$connection = new MysqlInstance();
                     break;
             }
